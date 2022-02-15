@@ -1,19 +1,26 @@
 package com.one.ourwiki.service;
 
+import com.one.ourwiki.domain.Comment;
 import com.one.ourwiki.domain.Contributor;
 import com.one.ourwiki.domain.Post;
+import com.one.ourwiki.repository.CommentRepository;
 import com.one.ourwiki.repository.PostRepository;
 import com.one.ourwiki.requestdto.PostCreateRequestDto;
 import com.one.ourwiki.requestdto.PostDeleteRequestDto;
 import com.one.ourwiki.requestdto.PostLikeRequestDto;
 import com.one.ourwiki.requestdto.PostModifyRequestDto;
+import com.one.ourwiki.responsedto.PostResponseDto;
+import com.one.ourwiki.responsedto.CommentResponseDto;
+import com.one.ourwiki.responsedto.ContributorResponseDto;
+import com.one.ourwiki.responsedto.PostDetailResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +28,9 @@ import java.util.Optional;
 public class PostService {
     
     private final PostRepository postRepository;
+    private final CommentRepository commentRepository;    
+    private final CommentService commentService;
+
     public ResponseEntity createPost(PostCreateRequestDto PostCreateRequestDto) {
         
         //validation 로직을 통과하지 못하면
@@ -30,6 +40,20 @@ public class PostService {
         postRepository.save(post);
         return ResponseEntity.status(HttpStatus.OK).body(null);
 
+    }
+
+    // 게시글 전체 조회
+    public List<PostResponseDto> viewPosts() {
+        List<PostResponseDto> postResponseDtos = new ArrayList<>();
+        List<Post> posts = postRepository.findAllByOrderByLikesDescModifiedAtDesc();
+      
+        for (Post post : posts) {
+            List<Comment> comments = commentRepository.findAllByPostId(post.getId());
+            int commentCount = comments.size();
+            PostResponseDto postResponseDto = new PostResponseDto(post, commentCount);
+            postResponseDtos.add(postResponseDto);
+        }
+        return postResponseDtos;
     }
 
     public ResponseEntity modifyPost(Long postId, PostModifyRequestDto postModifyRequestDto) {
@@ -83,5 +107,16 @@ public class PostService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
 
+    }
+
+    @Transactional
+    public PostDetailResponseDto getDetailPost(Long postId) {
+        Post post = postRepository.getById(postId);
+        List<ContributorResponseDto> contributorResponseDtos;
+        List<CommentResponseDto> commentResponseDtos = commentService.getComments(postId);
+
+        PostDetailResponseDto postDetailResponseDto = new PostDetailResponseDto(post, contributorResponseDtos, commentResponseDtos);
+
+        return postDetailResponseDto;
     }
 }
