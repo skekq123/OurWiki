@@ -4,6 +4,7 @@ import com.one.ourwiki.domain.Comment;
 import com.one.ourwiki.domain.Contributor;
 import com.one.ourwiki.domain.Post;
 import com.one.ourwiki.repository.CommentRepository;
+import com.one.ourwiki.repository.ContributorRepository;
 import com.one.ourwiki.repository.PostRepository;
 import com.one.ourwiki.requestdto.PostCreateRequestDto;
 import com.one.ourwiki.requestdto.PostDeleteRequestDto;
@@ -18,9 +19,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +32,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;    
     private final CommentService commentService;
-
+    private final ContributorRepository contributorRepository;
     public ResponseEntity createPost(PostCreateRequestDto PostCreateRequestDto) {
         
         //validation 로직을 통과하지 못하면
@@ -66,6 +68,7 @@ public class PostService {
         Optional<Post> findPost = postRepository.findById(postId);
         if(findPost.isPresent()){
             Contributor newContributor = new Contributor(postModifyRequestDto.getContributor());
+            contributorRepository.save(newContributor);
             findPost.get().modify(postModifyRequestDto.getDesc(), newContributor);
             return ResponseEntity.status(HttpStatus.OK).body(null);
         }else{
@@ -112,7 +115,14 @@ public class PostService {
     @Transactional
     public PostDetailResponseDto getDetailPost(Long postId) {
         Post post = postRepository.getById(postId);
-        List<ContributorResponseDto> contributorResponseDtos;
+        List<ContributorResponseDto> contributorResponseDtos = new ArrayList<>();
+        List<Contributor> contributors = post.getContributors();
+
+        for(Contributor contributor : contributors) {
+            ContributorResponseDto contributorResponseDto = new ContributorResponseDto(contributor);
+            contributorResponseDtos.add(contributorResponseDto);
+        }
+
         List<CommentResponseDto> commentResponseDtos = commentService.getComments(postId);
 
         PostDetailResponseDto postDetailResponseDto = new PostDetailResponseDto(post, contributorResponseDtos, commentResponseDtos);
