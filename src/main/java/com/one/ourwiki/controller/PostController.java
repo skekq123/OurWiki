@@ -5,6 +5,7 @@ import com.one.ourwiki.requestdto.PostCreateRequestDto;
 import com.one.ourwiki.requestdto.PostDeleteRequestDto;
 import com.one.ourwiki.requestdto.PostLikeRequestDto;
 import com.one.ourwiki.requestdto.PostModifyRequestDto;
+import com.one.ourwiki.responsedto.PostResponseDto;
 import com.one.ourwiki.responsedto.PostDetailResponseDto;
 import com.one.ourwiki.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,12 @@ public class PostController {
         return postService.createPost(PostCreateRequestDto);
     }
 
+    //글 조회
+    @GetMapping("/")
+    public List<PostResponseDto> viewPosts() {
+        return postService.viewPosts();
+    }
+
     //글 수정
     @PostMapping("/post/{postid}")
     public ResponseEntity modifyPost(@PathVariable Long postid,@RequestBody PostModifyRequestDto postModifyRequestDto){
@@ -39,7 +46,7 @@ public class PostController {
 
     //글 좋아요
     @PostMapping("/like/{postid}")
-    public ResponseEntity like(@PathVariable Long postid,@RequestBody PostLikeRequestDto postLikeRequestDto){
+    public ResponseEntity like(@PathVariable Long postid, @RequestBody PostLikeRequestDto postLikeRequestDto){
         return postService.like(postid, postLikeRequestDto);
     }
 
