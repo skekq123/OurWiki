@@ -1,7 +1,9 @@
 package com.one.ourwiki.domain;
 
+import com.one.ourwiki.repository.PostRepository;
 import com.one.ourwiki.requestdto.PostCreateRequestDto;
 import com.one.ourwiki.requestdto.PostModifyRequestDto;
+import com.one.ourwiki.responsedto.PostResponseDto;
 import lombok.*;
 
 import javax.persistence.*;
