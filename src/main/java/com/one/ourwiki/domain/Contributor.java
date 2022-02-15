@@ -23,4 +23,9 @@ public class Contributor {
     @ManyToOne
     @JoinColumn(name="post_id")
     private Post post;
+
+
+    public Contributor(String name){
+        this.name = name;
+    }
 }
