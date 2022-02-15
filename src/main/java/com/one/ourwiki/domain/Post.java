@@ -1,5 +1,7 @@
 package com.one.ourwiki.domain;
 
+import com.one.ourwiki.requestdto.PostCreateRequestDto;
+import com.one.ourwiki.requestdto.PostModifyRequestDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -40,4 +42,23 @@ public class Post extends Timestamped{
 
     @OneToMany(mappedBy = "post")
     private List<Contributor> contributors;
+    
+    public Post(PostCreateRequestDto PostCreateRequestDto){
+        this.title = PostCreateRequestDto.getTitle();
+        this.writer= PostCreateRequestDto.getWriter();
+        this.category=PostCreateRequestDto.getCategory();
+        this.password=PostCreateRequestDto.getPassword();
+        this.desc=PostCreateRequestDto.getDesc();
+        this.likes=0;
+    }
+
+    public void modify(String desc, Contributor contributor){
+        this.desc = desc;
+        this.contributors.add(contributor);
+        contributor.setPost(this);
+    }
+
+    public void like(int likes){
+        this.likes = likes;
+    }
 }
