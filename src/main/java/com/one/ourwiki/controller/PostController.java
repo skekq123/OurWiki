@@ -4,6 +4,7 @@ import com.one.ourwiki.requestdto.PostCreateRequestDto;
 import com.one.ourwiki.requestdto.PostDeleteRequestDto;
 import com.one.ourwiki.requestdto.PostLikeRequestDto;
 import com.one.ourwiki.requestdto.PostModifyRequestDto;
+import com.one.ourwiki.responsedto.PostDetailResponseDto;
 import com.one.ourwiki.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +38,11 @@ public class PostController {
     @PostMapping("/like/{postid}")
     public ResponseEntity like(@PathVariable Long postid,@RequestBody PostLikeRequestDto postLikeRequestDto){
         return postService.like(postid, postLikeRequestDto);
+    }
+
+    @GetMapping("/post/{postId}")
+    public PostDetailResponseDto getDetailPost(@PathVariable Long postId) {
+        return postService.getDetailPost(postId);
     }
 
 }
