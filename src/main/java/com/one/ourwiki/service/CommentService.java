@@ -34,7 +34,7 @@ public class CommentService {
     }
 
     public List<CommentResponseDto> getComments(Long postId) {
-        List<Comment> comments = commentRepository.getCommentsByPostId(postId);
+        List<Comment> comments = commentRepository.getCommentsByPostIdOrderByModifiedAtDesc(postId);
 
         List<CommentResponseDto> commentResponseDtos = new ArrayList<>();
 
