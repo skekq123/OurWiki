@@ -1,5 +1,6 @@
 package com.one.ourwiki.controller;
 
+import com.one.ourwiki.domain.Post;
 import com.one.ourwiki.requestdto.PostCreateRequestDto;
 import com.one.ourwiki.requestdto.PostDeleteRequestDto;
 import com.one.ourwiki.requestdto.PostLikeRequestDto;
@@ -9,6 +10,8 @@ import com.one.ourwiki.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
