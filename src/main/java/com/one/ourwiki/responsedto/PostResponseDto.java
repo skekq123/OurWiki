@@ -1,12 +1,11 @@
 package com.one.ourwiki.responsedto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.one.ourwiki.domain.Post;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
+@Builder
 @Getter
 @Setter
 @AllArgsConstructor
@@ -20,4 +19,15 @@ public class PostResponseDto {
     private int likes;
     private String desc;
     private int comment_count;
+
+    public PostResponseDto(Post post, int comment_count) {
+        this.post_id = post.getId();
+        this.title = post.getTitle();
+        this.writer = post.getWriter();
+        this.category = post.getCategory();
+        this.modifiedAt = post.getModifiedAt();
+        this.likes = post.getLikes();
+        this.desc = post.getDesc();
+        this.comment_count = comment_count;
+    }
 }

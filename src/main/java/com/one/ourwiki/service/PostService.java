@@ -1,19 +1,25 @@
 package com.one.ourwiki.service;
 
+import com.one.ourwiki.domain.Comment;
 import com.one.ourwiki.domain.Contributor;
 import com.one.ourwiki.domain.Post;
+import com.one.ourwiki.repository.CommentRepository;
 import com.one.ourwiki.repository.PostRepository;
 import com.one.ourwiki.requestdto.PostCreateRequestDto;
 import com.one.ourwiki.requestdto.PostDeleteRequestDto;
 import com.one.ourwiki.requestdto.PostLikeRequestDto;
 import com.one.ourwiki.requestdto.PostModifyRequestDto;
+import com.one.ourwiki.responsedto.PostResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +27,8 @@ import java.util.Optional;
 public class PostService {
     
     private final PostRepository postRepository;
+    private final CommentRepository commentRepository;    
+
     public ResponseEntity createPost(PostCreateRequestDto PostCreateRequestDto) {
         
         //validation 로직을 통과하지 못하면
@@ -30,6 +38,21 @@ public class PostService {
         postRepository.save(post);
         return ResponseEntity.status(HttpStatus.OK).body(null);
 
+    }
+
+    // 게시글 전체 조회
+    public List<PostResponseDto> viewPosts() {
+        List<PostResponseDto> postResponseDtos = new ArrayList<>();
+        List<Post> posts = postRepository.findAllByOrderByLikesDescModifiedAtDesc();
+
+        Post[] postList = new Post[posts.size()];
+        for (Post post : posts) {
+            List<Comment> comments = commentRepository.findAllByPostId(post.getId());
+            int commentCount = comments.size();
+            PostResponseDto postResponseDto = new PostResponseDto(post, commentCount);
+            postResponseDtos.add(postResponseDto);
+        }
+        return postResponseDtos;
     }
 
     public ResponseEntity modifyPost(Long postId, PostModifyRequestDto postModifyRequestDto) {
