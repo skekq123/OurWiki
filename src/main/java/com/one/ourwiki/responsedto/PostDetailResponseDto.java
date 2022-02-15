@@ -2,7 +2,9 @@ package com.one.ourwiki.responsedto;
 
 import com.one.ourwiki.domain.Post;
 import lombok.*;
+import org.apache.tomcat.jni.Local;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Builder
@@ -18,6 +20,7 @@ public class PostDetailResponseDto {
     private int likes;
     private String desc;
     private String password;
+    private LocalDateTime modifiedAt;
     List<ContributorResponseDto> contributors;
     List<CommentResponseDto> comments;
 
@@ -31,5 +34,6 @@ public class PostDetailResponseDto {
         this.password = post.getPassword();
         this.contributors = contributorResponseDto;
         this.comments = commentResponseDto;
+        this.modifiedAt = post.getModifiedAt();
     }
 }
