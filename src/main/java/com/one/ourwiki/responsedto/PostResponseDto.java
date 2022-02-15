@@ -15,7 +15,7 @@ public class PostResponseDto {
     private String title;
     private String writer;
     private String category;
-    private LocalDateTime modifiedAt;
+    private String modifiedAt;
     private int likes;
     private String desc;
     private int comment_count;
@@ -25,7 +25,11 @@ public class PostResponseDto {
         this.title = post.getTitle();
         this.writer = post.getWriter();
         this.category = post.getCategory();
-        this.modifiedAt = post.getModifiedAt();
+        String modifiedAt = post.getCreatedAt().toString();
+        String date = modifiedAt.substring(0,10);
+        String time = modifiedAt.substring(11,19);
+        modifiedAt = date + " " + time;
+        this.modifiedAt = modifiedAt;
         this.likes = post.getLikes();
         this.desc = post.getDesc();
         this.comment_count = comment_count;

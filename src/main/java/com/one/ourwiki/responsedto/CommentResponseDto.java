@@ -13,11 +13,15 @@ import java.time.LocalDateTime;
 public class CommentResponseDto {
     private String comment_writer;
     private String comment_desc;
-    private LocalDateTime createdAt;
+    private String createdAt;
 
     public CommentResponseDto(Comment comment) {
         this.comment_writer = comment.getCommentWriter();
         this.comment_desc = comment.getCommentDesc();
-        this.createdAt = comment.getModifiedAt();
+        String createdAt = comment.getCreatedAt().toString();
+        String date = createdAt.substring(0,10);
+        String time = createdAt.substring(11,19);
+        createdAt = date + " " + time;
+        this.createdAt = createdAt;
     }
 }

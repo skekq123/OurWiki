@@ -20,7 +20,7 @@ public class PostDetailResponseDto {
     private int likes;
     private String desc;
     private String password;
-    private LocalDateTime modifiedAt;
+    private String modifiedAt;
     List<ContributorResponseDto> contributors;
     List<CommentResponseDto> comments;
 
@@ -34,6 +34,10 @@ public class PostDetailResponseDto {
         this.password = post.getPassword();
         this.contributors = contributorResponseDto;
         this.comments = commentResponseDto;
-        this.modifiedAt = post.getModifiedAt();
+        String modifiedAt = post.getCreatedAt().toString();
+        String date = modifiedAt.substring(0,10);
+        String time = modifiedAt.substring(11,19);
+        modifiedAt = date + " " + time;
+        this.modifiedAt = modifiedAt;
     }
 }
