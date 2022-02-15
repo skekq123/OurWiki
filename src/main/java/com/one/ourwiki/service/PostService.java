@@ -7,12 +7,16 @@ import com.one.ourwiki.requestdto.PostCreateRequestDto;
 import com.one.ourwiki.requestdto.PostDeleteRequestDto;
 import com.one.ourwiki.requestdto.PostLikeRequestDto;
 import com.one.ourwiki.requestdto.PostModifyRequestDto;
+import com.one.ourwiki.responsedto.CommentResponseDto;
+import com.one.ourwiki.responsedto.ContributorResponseDto;
+import com.one.ourwiki.responsedto.PostDetailResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,6 +25,8 @@ import java.util.Optional;
 public class PostService {
     
     private final PostRepository postRepository;
+    private final CommentService commentService;
+
     public ResponseEntity createPost(PostCreateRequestDto PostCreateRequestDto) {
         
         //validation 로직을 통과하지 못하면
@@ -83,5 +89,16 @@ public class PostService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
 
+    }
+
+    @Transactional
+    public PostDetailResponseDto getDetailPost(Long postId) {
+        Post post = postRepository.getById(postId);
+        List<ContributorResponseDto> contributorResponseDtos;
+        List<CommentResponseDto> commentResponseDtos = commentService.getComments(postId);
+
+        PostDetailResponseDto postDetailResponseDto = new PostDetailResponseDto(post, contributorResponseDtos, commentResponseDtos);
+
+        return postDetailResponseDto;
     }
 }

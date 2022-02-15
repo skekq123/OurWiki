@@ -5,6 +5,7 @@ import com.one.ourwiki.domain.Post;
 import com.one.ourwiki.repository.CommentRepository;
 import com.one.ourwiki.repository.PostRepository;
 import com.one.ourwiki.requestdto.CommentRequestDto;
+import com.one.ourwiki.responsedto.CommentResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,8 +33,15 @@ public class CommentService {
         return comment;
     }
 
-    public List<Comment> getComments(Long postId) {
+    public List<CommentResponseDto> getComments(Long postId) {
         List<Comment> comments = commentRepository.getCommentsByPostId(postId);
-        return comments;
+
+        List<CommentResponseDto> commentResponseDtos = new ArrayList<>();
+
+        for(Comment comment : comments) {
+            CommentResponseDto commentResponseDto = new CommentResponseDto(comment);
+            commentResponseDtos.add(commentResponseDto);
+        }
+        return commentResponseDtos;
     }
 }
