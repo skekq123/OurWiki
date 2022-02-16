@@ -54,6 +54,15 @@ public class Post extends Timestamped{
         this.likes=0;
     }
 
+    public Post(String title, String writer, String category, int likes, String desc, String password) {
+        this.title = title;
+        this.writer = writer;
+        this.category = category;
+        this.likes = likes;
+        this.desc = desc;
+        this.password = password;
+    }
+
     public void modify(String desc, Contributor contributor){
         this.desc = desc;
         this.contributors.add(contributor);
