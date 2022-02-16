@@ -10,6 +10,7 @@ import com.one.ourwiki.responsedto.PostDetailResponseDto;
 import com.one.ourwiki.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public class PostController {
     
     //글 작성 
     @PostMapping("/post")
-    public ResponseEntity createPost(@RequestBody PostCreateRequestDto PostCreateRequestDto){
+    public ResponseEntity createPost(@RequestBody @Validated PostCreateRequestDto PostCreateRequestDto){
         return postService.createPost(PostCreateRequestDto);
     }
 
