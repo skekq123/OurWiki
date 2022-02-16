@@ -5,6 +5,7 @@ import com.one.ourwiki.requestdto.CommentRequestDto;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @NoArgsConstructor
@@ -21,7 +22,7 @@ public class Comment extends Timestamped{
     @Column(nullable = false)
     private String commentWriter;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 65000)
     private String commentDesc;
 
     @ManyToOne

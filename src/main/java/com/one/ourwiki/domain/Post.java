@@ -33,16 +33,16 @@ public class Post extends Timestamped{
     @Column(nullable = false)
     private int likes;
 
-    @Column(nullable = false)
+    @Column(nullable = false,length = 65000)
     private String desc;
 
     @Column(nullable = false)
     private String password;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade=CascadeType.REMOVE)
     private List<Comment> comments;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post",cascade=CascadeType.REMOVE)
     private List<Contributor> contributors;
     
     public Post(PostCreateRequestDto PostCreateRequestDto){
