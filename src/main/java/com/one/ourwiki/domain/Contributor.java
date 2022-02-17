@@ -22,7 +22,7 @@ public class Contributor {
 
     @ManyToOne
     @JoinColumn(name="post_id")
-    private Post post;
+    private Post posts;
 
 
     public Contributor(String name){
