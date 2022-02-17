@@ -50,7 +50,7 @@ public class PostService {
         List<Post> posts = postRepository.findAllByOrderByLikesDescModifiedAtDesc();
       
         for (Post post : posts) {
-            List<Comment> comments = commentRepository.findAllByPostId(post.getId());
+            List<Comment> comments = commentRepository.findAllByPostsId(post.getId());
             int commentCount = comments.size();
             PostResponseDto postResponseDto = new PostResponseDto(post, commentCount);
             postResponseDtos.add(postResponseDto);

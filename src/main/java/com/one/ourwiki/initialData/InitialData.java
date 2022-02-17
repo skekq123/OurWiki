@@ -1,3 +1,4 @@
+
 package com.one.ourwiki.initialData;
 
 import com.one.ourwiki.domain.Post;
@@ -63,3 +64,4 @@ public class InitialData implements ApplicationRunner {
         postRepository.save(post6);
     }
 }
+

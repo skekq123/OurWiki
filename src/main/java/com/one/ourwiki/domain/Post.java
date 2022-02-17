@@ -5,8 +5,10 @@ import com.one.ourwiki.requestdto.PostCreateRequestDto;
 import com.one.ourwiki.requestdto.PostModifyRequestDto;
 import com.one.ourwiki.responsedto.PostResponseDto;
 import lombok.*;
+import org.w3c.dom.Text;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Entity
@@ -14,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
+@Table(name="Board")
 @Builder
 public class Post extends Timestamped{
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -33,16 +36,16 @@ public class Post extends Timestamped{
     @Column(nullable = false)
     private int likes;
 
-    @Column(nullable = false,length = 65000)
+    @Column(name = "description", nullable = false, columnDefinition="VARCHAR(65000)")
     private String desc;
 
     @Column(nullable = false)
     private String password;
 
-    @OneToMany(mappedBy = "post", cascade=CascadeType.REMOVE)
+    @OneToMany(mappedBy = "posts", cascade=CascadeType.REMOVE)
     private List<Comment> comments;
 
-    @OneToMany(mappedBy = "post",cascade=CascadeType.REMOVE)
+    @OneToMany(mappedBy = "posts",cascade=CascadeType.REMOVE)
     private List<Contributor> contributors;
     
     public Post(PostCreateRequestDto PostCreateRequestDto){
@@ -66,7 +69,7 @@ public class Post extends Timestamped{
     public void modify(String desc, Contributor contributor){
         this.desc = desc;
         this.contributors.add(contributor);
-        contributor.setPost(this);
+        contributor.setPosts(this);
     }
 
     public void like(int likes){

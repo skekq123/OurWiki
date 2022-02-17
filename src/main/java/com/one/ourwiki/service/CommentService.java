@@ -34,7 +34,7 @@ public class CommentService {
     }
 
     public List<CommentResponseDto> getComments(Long postId) {
-        List<Comment> temporarycomments = commentRepository.getCommentsByPostIdOrderByModifiedAtDesc(postId);
+        List<Comment> temporarycomments = commentRepository.getCommentsByPostsIdOrderByModifiedAtDesc(postId);
         int commentSize = temporarycomments.size();
         if(commentSize > 20){
             for(int i =20; i<commentSize; i++){
@@ -42,7 +42,7 @@ public class CommentService {
             }
         }
 
-        List<Comment> comments = commentRepository.getCommentsByPostIdOrderByModifiedAtDesc(postId);
+        List<Comment> comments = commentRepository.getCommentsByPostsIdOrderByModifiedAtDesc(postId);
 
         List<CommentResponseDto> commentResponseDtos = new ArrayList<>();
 
